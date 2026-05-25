@@ -1,4 +1,15 @@
 version: 2
+
+sources:
+  - name: ecommerce
+    description: "Raw ecommerce tables from Snowflake. Update these table names if your dataset uses different names."
+    schema: PUBLIC
+    tables:
+      - name: ORDERS
+      - name: ORDER_ITEMS
+      - name: CUSTOMERS
+      - name: PRODUCTS
+
 models:
   - name: example
     description: "A simple test model to validate dbt + Snowflake connection."
@@ -7,3 +18,51 @@ models:
         description: "Current timestamp returned by Snowflake."
       - name: message
         description: "Static test message."
+
+  - name: sales_by_day
+    description: "Daily sales totals and average order value calculated from orders."
+    columns:
+      - name: order_date
+        description: "Date of the order."
+      - name: total_orders
+        description: "Number of orders on that day."
+      - name: total_revenue
+        description: "Total revenue collected on that day."
+      - name: avg_order_value
+        description: "Average order amount for that day."
+
+  - name: customer_lifetime_value
+    description: "Customer lifetime revenue and order statistics."
+    columns:
+      - name: customer_id
+        description: "Customer identifier."
+      - name: first_order_date
+        description: "Date of the customer's first order."
+      - name: last_order_date
+        description: "Date of the customer's most recent order."
+      - name: order_count
+        description: "Total number of orders for the customer."
+      - name: lifetime_revenue
+        description: "Total revenue attributed to the customer."
+      - name: avg_order_value
+        description: "Average revenue per order for the customer."
+
+  - name: top_products
+    description: "Top products ranked by sales revenue and quantity sold."
+    columns:
+      - name: product_id
+        description: "Product identifier."
+      - name: product_name
+        description: "Product name from the products table."
+      - name: total_quantity
+        description: "Total units sold."
+      - name: total_sales
+        description: "Total revenue for the product."
+
+  - name: weekly_active_customers
+    description: "Weekly active customer counts from order activity."
+    columns:
+      - name: week_start
+        description: "Beginning of the week for the activity window."
+      - name: active_customers
+        description: "Unique customers who placed orders in the week."
