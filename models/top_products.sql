@@ -2,24 +2,16 @@ with valid_orders as (
     select order_id
     from {{ source('ecommerce', 'orders') }}
     where upper(status) not in ('CANCELLED', 'RETURNED')
-),
-order_items as (
-    select
-        order_id,
-        product_id,
-        quantity,
-        item_price
-    from {{ source('ecommerce', 'order_items') }}
 )
 
 select
-    p.product_id,
-    p.product_name,
-    sum(oi.quantity) as total_quantity,
-    sum(oi.quantity * oi.item_price) as total_sales
-from order_items oi
-join valid_orders o using (order_id)
-join {{ source('ecommerce', 'products') }} p using (product_id)
-group by p.product_id, p.product_name
+    p.id as product_id,
+    p.name as product_name,
+    count(*) as total_quantity,
+    sum(oi.sale_price) as total_sales
+from {{ source('ecommerce', 'order_items') }} as oi
+join valid_orders as o on oi.order_id = o.order_id
+join {{ source('ecommerce', 'products') }} as p on oi.product_id = p.id
+group by p.id, p.name
 order by total_sales desc
 limit 50

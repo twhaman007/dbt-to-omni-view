@@ -1,15 +1,5 @@
 version: 2
 
-sources:
-  - name: ecommerce
-    description: "Raw ecommerce tables from Snowflake. Update these table names if your dataset uses different names."
-    schema: PUBLIC
-    tables:
-      - name: ORDERS
-      - name: ORDER_ITEMS
-      - name: CUSTOMERS
-      - name: PRODUCTS
-
 models:
   - name: example
     description: "A simple test model to validate dbt + Snowflake connection."

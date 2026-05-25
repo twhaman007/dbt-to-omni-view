@@ -5,7 +5,22 @@ sources:
     database: ECOMMERCE_LOOKER
     schema: PUBLIC
     tables:
-      - name: orders
+      - name: ri_csp
+      - name: campaigns
+      - name: conversions
+      - name: my_second_dbt_model
+      - name: inventory_items
       - name: order_items
-      - name: customers
+      - name: users
       - name: products
+      - name: channels
+      - name: targetbusmapping
+      - name: ad_events
+      - name: distribution_centers
+      - name: example
+      - name: rsu_users
+      - name: sessions
+      - name: my_first_dbt_model
+      - name: events
+      - name: attribution_touchpoints
+      - name: orders
