@@ -1,0 +1,9 @@
+version: 2
+models:
+  - name: example
+    description: "A simple test model to validate dbt + Snowflake connection."
+    columns:
+      - name: now
+        description: "Current timestamp returned by Snowflake."
+      - name: message
+        description: "Static test message."

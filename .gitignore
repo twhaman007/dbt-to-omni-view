@@ -1,0 +1,9 @@
+.venv/
+logs/
+target/
+dbt_modules/
+profiles.yml.example
+.env
+*.pyc
+__pycache__/
+.DS_Store
