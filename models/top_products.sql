@@ -1,9 +1,17 @@
-SELECT "PRODUCT_ID" AS "omni_dbt__top_products.product_id",
-    "PRODUCT_NAME" AS "omni_dbt__top_products.product_name",
-    "TOTAL_QUANTITY" AS "omni_dbt__top_products.total_quantity",
-    "TOTAL_SALES" AS "omni_dbt__top_products.total_sales",
-    COUNT(*) AS "omni_dbt__top_products.count"
-FROM "TOP_PRODUCTS" AS "omni_dbt__top_products"
-GROUP BY 1, 2, 3, 4
-ORDER BY 5 DESC NULLS LAST
-LIMIT 1000
+with valid_orders as (
+    select order_id
+    from {{ source('ecommerce', 'orders') }}
+    where upper(status) not in ('CANCELLED', 'RETURNED')
+)
+
+select
+    p.id as product_id,
+    p.name as product_name,
+    count(*) as total_quantity,
+    sum(oi.sale_price) as total_sales
+from {{ source('ecommerce', 'order_items') }} as oi
+join valid_orders as o on oi.order_id = o.order_id
+join {{ source('ecommerce', 'products') }} as p on oi.product_id = p.id
+group by p.id, p.name
+order by total_sales desc
+limit 50
