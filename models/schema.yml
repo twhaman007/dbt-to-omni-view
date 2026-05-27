@@ -56,3 +56,83 @@ models:
         description: "Beginning of the week for the activity window."
       - name: active_customers
         description: "Unique customers who placed orders in the week."
+
+  - name: fact_transactions
+    description: "Transaction-level semantic fact combining orders and order_items with customer context."
+    semantic_model:
+      enabled: true
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier for the order."
+        entity:
+          type: primary
+          name: transaction
+      - name: customer_id
+        description: "Customer identifier associated with the transaction."
+        entity:
+          type: foreign
+          name: customer
+      - name: transaction_date
+        description: "Date when the transaction occurred."
+        dimension:
+          type: time
+          granularity: day
+      - name: order_country
+        description: "Country of the customer at the time of the transaction."
+        dimension:
+          type: categorical
+      - name: transaction_total
+        description: "Total order amount summed across order items."
+      - name: average_transaction_total
+        description: "Average sale price per item in the transaction."
+      - name: median_sales
+        description: "Median sale price across items in the transaction."
+    metrics:
+      - name: transaction_total
+        label: Total Transaction Value
+        type: sum
+        expr: transaction_total
+      - name: average_transaction_total
+        label: Average Transaction Value
+        type: average
+        expr: average_transaction_total
+      - name: median_sales
+        label: Median Item Sale Price
+        type: median
+        expr: median_sales
+
+  - name: dim_customers
+    description: "Customer dimension built from the users source."
+    semantic_model:
+      enabled: true
+    columns:
+      - name: customer_id
+        description: "Primary customer identifier."
+        entity:
+          type: primary
+          name: customer
+      - name: first_name
+        description: "Customer first name."
+        dimension:
+          type: categorical
+      - name: last_name
+        description: "Customer last name."
+        dimension:
+          type: categorical
+      - name: email
+        description: "Customer email address."
+        dimension:
+          type: categorical
+      - name: country
+        description: "Customer country of residence."
+        dimension:
+          type: categorical
+      - name: state
+        description: "Customer state or region."
+        dimension:
+          type: categorical
+      - name: created_date
+        description: "Customer creation date."
+        dimension:
+          type: time
+          granularity: day
