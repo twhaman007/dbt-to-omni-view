@@ -1,17 +1,11 @@
-semantic_models:
-  - name: dim_customers
-    model: ref('dim_customers')
-    entities:
-      - name: customer
-        type: primary
-        expr: customer_id
+version: 2
 
+models:
   - name: fact_transactions
-    model: ref('fact_transactions')
-    entities:
-      - name: transaction
-        type: primary
-        expr: transaction_id
-      - name: customer       # matches primary entity in dim_customers → join
-        type: foreign
-        expr: customer_id
+    columns:
+      - name: customer_id
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
